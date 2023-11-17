@@ -1,2 +1,3 @@
 # weather_station
-Weather_station
+
+This project contain my Arduino-based weather station 
