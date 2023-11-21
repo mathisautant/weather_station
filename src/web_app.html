@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather station dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        background-color: #333; /* Dark grey background */
+            color: #fff; /* White text color */
+            font-family: Verdana, sans-serif; /* Use Verdana font or fallback to sans-serif */
+            margin: 10; /* Remove default margin */
+            padding: 20px; /* Add some padding for better visibility of the content */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items:flex-start;
+          }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      .graph-container {
+        display: flex;
+        justify-content: space-between;
+        width: 50%;
+      }
+
+      .graph {
+        width: 48%;
+        border: 1px solid #fff;
+        margin: 10px
+      }
+    </style>
+</head>
+<body>
+    <h1>Weasel weather station dashboard</h1>
+
+    <div class="graph-container">
+        <canvas id="temperatureGraph" class="graph"></canvas>
+        <canvas id="humidityGraph" class="graph"></canvas>
+    </div>
+
+    <script>
+        // Function to create a linear dataset
+        function createLinearDataset(func, label, color) {
+            const data = [];
+            for (let x = -10; x <= 10; x++) {
+                data.push(func(x));
+            }
+            return {
+                label: label,
+                data: data,
+                borderColor: color,
+                fill: false
+            };
+        }
+
+        // Data for the left graph (x + 1)
+        const temperatureData = createLinearDataset(x => x + 1, 'Temperature (x + 1)', 'red');
+
+        // Data for the right graph (x - 1)
+        const humidityData = createLinearDataset(x => x - 1, 'Humidity (x - 1)', 'blue');
+
+        // Configuration for Chart.js
+        const config = {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: 21 }, (_, i) => i - 10),
+                datasets: [temperatureData, humidityData]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom'
+                    },
+                    y: {
+                        min: -10,
+                        max: 11
+                    }
+                }
+            }
+        };
+
+        // Create the left graph (temperature)
+        const temperatureContext = document.getElementById('temperatureGraph').getContext('2d');
+        new Chart(temperatureContext, config);
+
+        // Create the right graph (humidity)
+        const humidityContext = document.getElementById('humidityGraph').getContext('2d');
+        new Chart(humidityContext, config);
+    </script>
+</body>
+</html>
